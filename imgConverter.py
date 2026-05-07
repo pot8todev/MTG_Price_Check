@@ -13,11 +13,6 @@ def get_price(folder):
 
             path = os.path.join(folder, file)
 
-            text = pytesseract.image_to_string(
-                Image.open(path),
-                config="--psm 10 digits"
-            )
-
         text = pytesseract.image_to_string(
             Image.open(path),
             config="--psm 10 -c tessedit_char_whitelist=0123456789"
@@ -25,9 +20,12 @@ def get_price(folder):
         try:
             price = float(text.strip())
 
+            # hard coded
             if price > 50:
                 price = price / 100
                 print(file, "->", price)
+            print(f"\033[34m{file} -> {text.strip()}\033[0m")
         except ValueError:
-            print(file, "->", "????")
+            # red to show error
+            print(f"\033[31m{file} -> {text.strip()}\033[0m")
             continue

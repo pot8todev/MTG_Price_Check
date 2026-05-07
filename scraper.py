@@ -1,10 +1,18 @@
 import shutil
 import os
+import time
 
 from setup.driver_setup import driver
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup as bs
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+
+WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.CLASS_NAME, "price-with-image"))
+)
 
 
 def url_formatter(url_base, url_target):
