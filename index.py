@@ -1,9 +1,14 @@
 
+from setup.driver_setup import driver
 from scraper import get_images
-from imgConverter import get_price
+from OCR import get_price
 
-target = "sneaky snacker"
-folder = f"out/{target.title().replace(" ", "")}/screenshots"
+targets = ["sneaky snacker", "lightning bolt",
+           "fiery temper", "highway robbery"]
 
-get_images(target, folder)
-get_price(folder)
+for target in targets:
+    path = f"out/{target.title().replace(" ", "")}/screenshots"
+    get_images(target, path)
+    get_price(path)
+
+driver.quit()
