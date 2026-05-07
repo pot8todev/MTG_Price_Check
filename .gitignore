@@ -1,3 +1,6 @@
 .DS_Store
 venv/
-pictures/
+out/
+__pycache__
+.env
+
