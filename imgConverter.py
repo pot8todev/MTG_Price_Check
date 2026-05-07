@@ -4,17 +4,30 @@ import pytesseract
 
 from PIL import Image
 
-folder = "screenshots"
 
-for file in os.listdir(folder):
+def get_price(folder):
 
-    if file.endswith(".png"):
+    for file in os.listdir(folder):
 
-        path = os.path.join(folder, file)
+        if file.endswith(".png"):
+
+            path = os.path.join(folder, file)
+
+            text = pytesseract.image_to_string(
+                Image.open(path),
+                config="--psm 10 digits"
+            )
 
         text = pytesseract.image_to_string(
             Image.open(path),
-            config="--psm 10 digits"
+            config="--psm 10 -c tessedit_char_whitelist=0123456789"
         )
+        try:
+            price = float(text.strip())
 
-        print(file, "->", text.strip())
+            if price > 50:
+                price = price / 100
+                print(file, "->", price)
+        except ValueError:
+            print(file, "->", "????")
+            continue

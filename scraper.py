@@ -1,3 +1,4 @@
+import shutil
 import os
 
 from setup.driver_setup import driver
@@ -13,41 +14,34 @@ def url_formatter(url_base, url_target):
     )
 
 
-load_dotenv()
+def get_images(url_target, path):
+    load_dotenv()
 
-url_base = os.getenv(
-    "BASE_URL",
-    "https://localhost8000.com/"
-)
-
-url_target = "lightning bolt"
-
-url = url_formatter(url_base, url_target)
-
-print(url)
-
-driver.set_page_load_timeout(5)
-driver.get(url)
-
-html = driver.page_source
-
-soup = bs(html, "html.parser")
-
-stores = soup.find_all("div", class_="store")
-
-prices = driver.find_elements(
-    By.CLASS_NAME,
-    "price-with-image"
-)
-
-dir = url_target.title().replace(" ", "")
-
-os.makedirs(f"out/{dir}/screenshots", exist_ok=True)  # ensure exists
-
-for i, p in enumerate(prices):
-
-    p.screenshot(
-        f"out/{dir}/screenshots/price{i}.png"
+    url_base = os.getenv(
+        "BASE_URL",
+        "https://localhost8000.com/"
     )
 
-driver.quit()
+    url = url_formatter(url_base, url_target)
+    print(url)
+
+    driver.set_page_load_timeout(5)
+    driver.get(url)
+
+    prices = driver.find_elements(
+        By.CLASS_NAME,
+        "price-with-image"
+    )
+
+    # reset folder
+    if os.path.exists(path):
+        shutil.rmtree(path)
+    os.makedirs(path)  # ensure exists
+
+    for i, p in enumerate(prices):
+
+        p.screenshot(
+            f"{path}/price{i}.png"
+        )
+
+    driver.quit()
