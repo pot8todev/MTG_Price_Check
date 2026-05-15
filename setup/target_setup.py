@@ -1,5 +1,7 @@
 from setup.driver_setup import driver
 from selenium.webdriver.common.by import By
+from dotenv import load_dotenv
+import os
 
 
 # hard codded entry to get the deck list
@@ -7,7 +9,12 @@ from selenium.webdriver.common.by import By
 
 def fetchDeck():
 
-    url = "https://www.mtggoldfish.com/archetype/pauper-madness-burn#paper"
+    load_dotenv()
+    url = os.getenv(
+        "TARGET_URL",  # change target to your mtgGoldfish list
+        "https://localhost8000.com/"
+    )
+
     driver.get(url)
     rows = driver.find_elements(By.CSS_SELECTOR, "tr[data-card-name]")
 

@@ -10,6 +10,7 @@ targets = list(deck.keys())
 for target in targets:
     # card name is the namme of its own folder
     folderName = target.title().replace(" ", "")
+
     path = f"out/{folderName}/screenshots"
     get_images(target, path)
     get_price(path)
