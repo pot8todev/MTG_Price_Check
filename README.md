@@ -18,11 +18,9 @@ pip install -r setup/requirements.txt
 
 ## ⚙️ Configuration
 ### 🌐 Using your Chrome profile with Selenium
-```bash
 To allow Selenium to reuse your logged-in Chrome session
 (for example, to bypass repeated logins or Cloudflare checks),
 start Chrome with remote debugging enabled.
-```
 
 ### macOS
 
