@@ -18,18 +18,17 @@ def get_price(file_path):
             Image.open(path),
             config="--psm 10 -c tessedit_char_whitelist=0123456789"
         )
-        message = f"{file} -> {text.strip()}"
         try:
-            price = float(text.strip())
+            price = float(text.strip())/100
 
-            # # hard coded
-            # if price > 50:
-            #     price = price / 100
-            #     print(file, "->", price)
+            message = f"{file} -> {price}"
+
             print(f"\033[34m{message}\033[0m")
             with open(f"{file_path}/prices.txt", "a", encoding="utf-8") as f:
                 f.write(f"{price/100}" + "\n")
+
         except ValueError:
+            message = f"{file} -> {text.strip()}"
             # red to show error
             print(f"\033[31m{message}\033[0m")
             continue

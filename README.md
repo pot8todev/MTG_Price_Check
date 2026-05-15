@@ -39,6 +39,7 @@ TARGET_URL=<yourMtgGoldfishURLhere>
 
 Notes:
 BASE_URL → used for card lookup (LigaMagic integration)
+
 TARGET_URL → MTGGoldfish deck or archetype page to scrape
 ## 🚀 Running the scraper
 Run the project with:
