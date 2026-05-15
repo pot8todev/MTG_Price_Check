@@ -1,7 +1,7 @@
 
 from setup.driver_setup import driver
 from scraper import get_images
-from OCR import get_price
+from OCR.OCR import get_price
 from setup.target_setup import fetchDeck
 
 deck = fetchDeck()
