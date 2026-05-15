@@ -2,17 +2,19 @@
 import os
 import pytesseract
 from natsort import natsorted
-
 from PIL import Image
+
+from setup.deck_setup import deck
 
 
 def get_price(file_path):
+    screenshot_file_path = os.path.join(file_path, "screenshots")
 
-    for file in natsorted(os.listdir(file_path)):
+    for file in natsorted(os.listdir(screenshot_file_path)):
 
         if file.endswith(".png"):
 
-            path = os.path.join(file_path, file)
+            path = os.path.join(screenshot_file_path, file)
 
         text = pytesseract.image_to_string(
             Image.open(path),
@@ -25,7 +27,7 @@ def get_price(file_path):
 
             print(f"\033[34m{message}\033[0m")
             with open(f"{file_path}/prices.txt", "a", encoding="utf-8") as f:
-                f.write(f"{price/100}" + "\n")
+                f.write(f"|{price:8.2f}|\n")
 
         except ValueError:
             message = f"{file} -> {text.strip()}"
