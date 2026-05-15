@@ -4,6 +4,7 @@ import shutil
 import os
 import time
 
+from index import reset_folder
 from setup.driver_setup import driver
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup as bs
@@ -88,9 +89,7 @@ def get_images(url_target, path):
     )
 
     # reset folder
-    if os.path.exists(path):
-        shutil.rmtree(path)
-    os.makedirs(path)  # ensure exists
+    reset_folder(path)
 
     for i, p in enumerate(prices):
 
