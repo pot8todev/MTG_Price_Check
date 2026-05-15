@@ -14,6 +14,8 @@ for card_name in deck.keys():
 
     os.makedirs(card_path)  # ensure exists
     get_images(card_name, screenshots_path)
-    get_price(card_path)
+    count_total, count_value_error = get_price(card_path)
 
+    print(f"\nerros: {count_value_error}/{count_total}")
+print("encerrando processo")
 driver.quit()

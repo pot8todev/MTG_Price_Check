@@ -99,6 +99,13 @@ def get_images(url_target, path):
 
     for i, p in enumerate(prices):
 
+        # Role a página até o elemento p e coloque ele no centro da tela.
+        driver.execute_script(
+            "arguments[0].scrollIntoView({block: 'center'});",
+            p
+        )
+        time.sleep(0.3)
+
         p.screenshot(
             f"{path}/price{i}.png"
         )
