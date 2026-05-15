@@ -4,29 +4,32 @@ import shutil
 from setup.driver_setup import driver
 from scraper import get_images
 from OCR.OCR import get_price
-from setup.target_setup import fetchDeck
+from setup.deck_setup import fetchDeck
+
+OUTPUT_DIR = "/out"
 
 
 def reset_folder(out_path):
-    # Reset folder
+    # deletes and recreate a folder
     if os.path.exists(out_path):
         shutil.rmtree(out_path)
     os.makedirs(out_path)
 
 
-reset_folder("out/")
+reset_folder(OUTPUT_DIR)
 
 deck = fetchDeck()
-targets = list(deck.keys())
+card_name = list(deck.keys())
 
 
-for target in targets:
+for card_name in deck.keys():
     # card name is the namme of its own folder
-    folderName = target.title().replace(" ", "")
-    path = f"out/{folderName}/screenshots"
+    folderName = card_name.title().replace(" ", "")
+    card_path = f"out/{folderName}"
+    screenshots_path = f"{card_path}/screenshots"
 
-    os.makedirs(path)  # ensure exists
-    get_images(target, path)
-    get_price(path)
+    os.makedirs(card_path)  # ensure exists
+    get_images(card_name, screenshots_path)
+    get_price(card_path)
 
 driver.quit()
