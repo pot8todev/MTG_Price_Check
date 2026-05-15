@@ -1,7 +1,7 @@
 
 import os
 from setup.driver_setup import driver
-from scraper import get_images, reset_folder
+from scraper import get_images
 from OCR.OCR import get_price
 from setup.deck_setup import deck
 
