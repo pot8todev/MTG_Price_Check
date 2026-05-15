@@ -4,10 +4,9 @@ import shutil
 import os
 import time
 
-from index import reset_folder
+
 from setup.driver_setup import driver
 from dotenv import load_dotenv
-from bs4 import BeautifulSoup as bs
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -17,6 +16,13 @@ from selenium.common.exceptions import (
     InvalidArgumentException,
     WebDriverException
 )
+
+
+def reset_folder(out_path):
+    # deletes and recreate a folder
+    if os.path.exists(out_path):
+        shutil.rmtree(out_path)
+    os.makedirs(out_path)
 
 
 def url_formatter(url_base, url_target):
@@ -96,3 +102,7 @@ def get_images(url_target, path):
         p.screenshot(
             f"{path}/price{i}.png"
         )
+
+
+OUTPUT_DIR = "out"
+reset_folder(OUTPUT_DIR)

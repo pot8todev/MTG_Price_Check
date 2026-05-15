@@ -4,9 +4,6 @@ from dotenv import load_dotenv
 import os
 
 
-# hard codded entry to get the deck list
-
-
 def fetchDeck():
 
     load_dotenv()
@@ -38,3 +35,6 @@ def fetchDeck():
             "image": image,
         }
     return deck
+
+
+deck = fetchDeck()
