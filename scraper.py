@@ -17,10 +17,6 @@ from selenium.common.exceptions import (
     WebDriverException
 )
 
-WebDriverWait(driver, 10).until(
-    EC.presence_of_element_located((By.CLASS_NAME, "price-with-image"))
-)
-
 
 def url_formatter(url_base, url_target):
     return (
@@ -72,6 +68,10 @@ def get_images(url_target, path):
         fetch(url)
         driver.set_page_load_timeout(5)
         driver.get(url)
+
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "price-with-image"))
+        )
 
     except TimeoutException:
         print("Page load timed out")

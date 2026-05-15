@@ -2,12 +2,15 @@
 from setup.driver_setup import driver
 from scraper import get_images
 from OCR import get_price
+from setup.target_setup import fetchDeck
 
-targets = ["sneaky snacker", "lightning bolt",
-           "fiery temper", "highway robbery"]
+deck = fetchDeck()
+targets = list(deck.keys())
 
 for target in targets:
-    path = f"out/{target.title().replace(" ", "")}/screenshots"
+    # card name is the namme of its own folder
+    folderName = target.title().replace(" ", "")
+    path = f"out/{folderName}/screenshots"
     get_images(target, path)
     get_price(path)
 
