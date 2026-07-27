@@ -2,6 +2,7 @@ from setup.driver_setup import driver
 from selenium.webdriver.common.by import By
 from dotenv import load_dotenv
 import os
+import json
 
 
 def fetchDeck():
@@ -33,8 +34,20 @@ def fetchDeck():
             "mana_cost": mana_cost,
             "price": price,
             "image": image,
+            "url": url,
         }
     return deck
 
-
-deck = fetchDeck()
+if os.path.exists("deck.json"):
+    try:
+        with open("deck.json", "r", encoding="utf-8") as f:
+            deck = json.load(f)
+    except json.JSONDecodeError:
+        deck = fetchDeck()
+        with open("deck.json", "w", encoding="utf-8") as f:
+            json.dump(deck, f, indent=4, ensure_ascii=False)
+else:
+    deck = fetchDeck()
+    if deck :
+        with open("deck.json", "w", encoding="utf-8") as f:
+            json.dump(deck, f, indent=4, ensure_ascii=False)

@@ -34,6 +34,8 @@ def url_formatter(url_base, url_target):
 
 def fetch(url):
     print(url)
+
+
     session = requests.Session()
 
     headers = {
