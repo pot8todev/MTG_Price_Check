@@ -1,8 +1,8 @@
-import requests
-import random
-import shutil
 import os
 import time
+import shutil
+import random
+import requests
 
 from bs4 import BeautifulSoup
 from setup.driver_setup import driver
@@ -14,7 +14,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import (
     TimeoutException,
     InvalidArgumentException,
-    WebDriverException
+    WebDriverException,
 )
 
 
@@ -26,15 +26,11 @@ def reset_folder(out_path):
 
 
 def url_formatter(url_base, url_target):
-    return (
-        url_base +
-        url_target.title().replace(" ", "+")
-    )
+    return url_base + url_target.title().replace(" ", "+")
 
 
 def fetch(url):
     print(url)
-
 
     session = requests.Session()
 
@@ -47,11 +43,7 @@ def fetch(url):
     }
     time.sleep(random.uniform(2, 5))  # slow down
 
-    response = session.get(
-        url,
-        headers=headers,
-        timeout=20
-    )
+    response = session.get(url, headers=headers, timeout=20)
 
     print(response.status_code)
 
@@ -66,10 +58,7 @@ def get_stores_data(url_target, path):
 
     load_dotenv()
 
-    url_base = os.getenv(
-        "BASE_URL",
-        "https://localhost8000.com/"
-    )
+    url_base = os.getenv("BASE_URL", "https://localhost8000.com/")
 
     url = url_formatter(url_base, url_target)
 
@@ -92,37 +81,32 @@ def get_stores_data(url_target, path):
         print(f"WebDriver error: {e}")
 
     html_content = driver.page_source
-    soup= BeautifulSoup(html_content,"html.parser")
+    soup = BeautifulSoup(html_content, "html.parser")
 
-    #adding all  store names in paralel
+    # adding all  store names in paralel
     names_store = []
     for link in soup.select(" .store .name-ed"):
         clean_name = link.text.strip()
         names_store.append(clean_name)
 
-    #hiding the cookie notification that clouds the view
+    # hiding the cookie notification that clouds the view
     driver.execute_script(
         "document.getElementById('lgpd-cookie').style.display = 'none';"
     )
 
-    prices = driver.find_elements( By.CSS_SELECTOR, ".store .price-with-image")
-    qnts = driver.find_elements( By.CSS_SELECTOR, ".store .quantity-with-image")
-    
+    prices = driver.find_elements(By.CSS_SELECTOR, ".store .price-with-image")
+    qnts = driver.find_elements(By.CSS_SELECTOR, ".store .quantity-with-image")
     reset_folder(path)
 
-    for i,(price,qnt)  in enumerate(zip(prices,qnts)):
-
+    for i, (price, qnt) in enumerate(zip(prices, qnts)):
         time.sleep(2)
 
         # Role a página até o elemento p e coloque ele no centro da tela.
-        driver.execute_script(
-            "arguments[0].scrollIntoView({block: 'center'});",
-            price
-        )
-        price.screenshot( f"{path}/price{i}.png")
-        qnt.screenshot( f"{path}/qnt{i}.png")
+        driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", price)
+        price.screenshot(f"{path}/prices/price{i}.png")
+        qnt.screenshot(f"{path}/quantities/qnt{i}.png")
 
-    return names_store 
+    return names_store
 
 
 OUTPUT_DIR = "out"
