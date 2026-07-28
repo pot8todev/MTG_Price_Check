@@ -19,7 +19,7 @@ from selenium.common.exceptions import (
 
 
 def reset_folder(out_path):
-    # deletes and recreate a folder
+    # recreate a folder for current scraping
     if os.path.exists(out_path):
         shutil.rmtree(out_path)
     os.makedirs(out_path)
@@ -75,10 +75,10 @@ def get_images(url_target, path):
 
     try:
         fetch(url)
-        driver.set_page_load_timeout(5)
+        driver.set_page_load_timeout(50)
         driver.get(url)
 
-        WebDriverWait(driver, 10).until(
+        WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.CLASS_NAME, "price-with-image"))
         )
 
@@ -96,18 +96,17 @@ def get_images(url_target, path):
         "price-with-image"
     )
 
-    # reset folder
     reset_folder(path)
 
     for i, p in enumerate(prices):
 
+        time.sleep(2)
+        
         # Role a página até o elemento p e coloque ele no centro da tela.
         driver.execute_script(
             "arguments[0].scrollIntoView({block: 'center'});",
             p
         )
-        time.sleep(0.3)
-
         p.screenshot(
             f"{path}/price{i}.png"
         )
