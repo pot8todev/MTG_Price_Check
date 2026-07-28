@@ -95,7 +95,13 @@ def get_images(url_target, path):
         By.CLASS_NAME,
         "price-with-image"
     )
-
+    driver.execute_script(
+        "document.getElementById('lgpd-cookie').style.display = 'none';"
+)
+    # prices = driver.find_elements(
+    #     By.CLASS_NAME,
+    #     "price-with-image"
+    # )
     reset_folder(path)
 
     for i, p in enumerate(prices):
