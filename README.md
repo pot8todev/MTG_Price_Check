@@ -15,6 +15,11 @@ Install dependencies:
 ```bash
 pip install -r setup/requirements.txt
 ```
+this code uses pytesseract, that requires tesseract to be installed in your machine, so install using you prefered package manager
+```bash
+brew install tesseract
+```
+
 
 ## ⚙️ Configuration
 ### 🌐 Using your Chrome profile with Selenium
