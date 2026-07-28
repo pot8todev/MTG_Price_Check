@@ -4,7 +4,7 @@ import shutil
 import os
 import time
 
-
+from bs4 import BeautifulSoup
 from setup.driver_setup import driver
 from dotenv import load_dotenv
 
@@ -62,7 +62,7 @@ def fetch(url):
     return response
 
 
-def get_images(url_target, path):
+def get_stores_data(url_target, path):
 
     load_dotenv()
 
@@ -91,31 +91,38 @@ def get_images(url_target, path):
     except WebDriverException as e:
         print(f"WebDriver error: {e}")
 
-    prices = driver.find_elements(
-        By.CLASS_NAME,
-        "price-with-image"
-    )
+    html_content = driver.page_source
+    soup= BeautifulSoup(html_content,"html.parser")
+
+    #adding all  store names in paralel
+    names_store = []
+    for link in soup.select(" .store .name-ed"):
+        clean_name = link.text.strip()
+        names_store.append(clean_name)
+
+    #hiding the cookie notification that clouds the view
     driver.execute_script(
         "document.getElementById('lgpd-cookie').style.display = 'none';"
-)
-    # prices = driver.find_elements(
-    #     By.CLASS_NAME,
-    #     "price-with-image"
-    # )
+    )
+
+    prices = driver.find_elements( By.CSS_SELECTOR, ".store .price-with-image")
+    qnts = driver.find_elements( By.CSS_SELECTOR, ".store .quantity-with-image")
+    
     reset_folder(path)
 
-    for i, p in enumerate(prices):
+    for i,(price,qnt)  in enumerate(zip(prices,qnts)):
 
         time.sleep(2)
-        
+
         # Role a página até o elemento p e coloque ele no centro da tela.
         driver.execute_script(
             "arguments[0].scrollIntoView({block: 'center'});",
-            p
+            price
         )
-        p.screenshot(
-            f"{path}/price{i}.png"
-        )
+        price.screenshot( f"{path}/price{i}.png")
+        qnt.screenshot( f"{path}/qnt{i}.png")
+
+    return names_store 
 
 
 OUTPUT_DIR = "out"
