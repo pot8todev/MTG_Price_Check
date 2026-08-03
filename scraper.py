@@ -18,11 +18,18 @@ from selenium.common.exceptions import (
 )
 
 
-def reset_folder(out_path):
-    # recreate a folder for current scraping
+def assure_new_folder(out_path):
+    # Recria a pasta principal
     if os.path.exists(out_path):
         shutil.rmtree(out_path)
+
     os.makedirs(out_path)
+
+    # to reset folders properly
+    if out_path != "out":
+        # Cria as subpastas
+        os.makedirs(os.path.join(out_path, "quantities"))
+        os.makedirs(os.path.join(out_path, "prices"))
 
 
 def url_formatter(url_base, url_target):
@@ -84,30 +91,30 @@ def get_stores_data(url_target, path):
     soup = BeautifulSoup(html_content, "html.parser")
 
     # adding all  store names in paralel
-    names_store = []
+    store_names = []
     for link in soup.select(" .store .name-ed"):
         clean_name = link.text.strip()
-        names_store.append(clean_name)
+        store_names.append(clean_name)
 
     # hiding the cookie notification that clouds the view
     driver.execute_script(
         "document.getElementById('lgpd-cookie').style.display = 'none';"
     )
 
-    prices = driver.find_elements(By.CSS_SELECTOR, ".store .price-with-image")
-    qnts = driver.find_elements(By.CSS_SELECTOR, ".store .quantity-with-image")
-    reset_folder(path)
+    prices_html = driver.find_elements(By.CSS_SELECTOR, ".store .price-with-image")
+    qnts_html = driver.find_elements(By.CSS_SELECTOR, ".store .quantity-with-image")
+    assure_new_folder(path)
 
-    for i, (price, qnt) in enumerate(zip(prices, qnts)):
-        time.sleep(2)
+    for i, (price, qnt) in enumerate(zip(prices_html, qnts_html)):
+        time.sleep(1)
 
         # Role a página até o elemento p e coloque ele no centro da tela.
         driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", price)
         price.screenshot(f"{path}/prices/price{i}.png")
         qnt.screenshot(f"{path}/quantities/qnt{i}.png")
 
-    return names_store
+    return store_names
 
 
 OUTPUT_DIR = "out"
-reset_folder(OUTPUT_DIR)
+assure_new_folder(OUTPUT_DIR)

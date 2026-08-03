@@ -10,7 +10,7 @@ def fetchDeck():
     load_dotenv()
     url = os.getenv(
         "TARGET_URL",  # change target to your mtgGoldfish list
-        "https://localhost8000.com/"
+        "https://localhost8000.com/",
     )
 
     driver.get(url)
@@ -38,16 +38,18 @@ def fetchDeck():
         }
     return deck
 
-if os.path.exists("deck.json"):
+
+json_path = "setup/deck.json"
+if os.path.exists(json_path):
     try:
-        with open("deck.json", "r", encoding="utf-8") as f:
+        with open(json_path, "r", encoding="utf-8") as f:
             deck = json.load(f)
     except json.JSONDecodeError:
         deck = fetchDeck()
-        with open("deck.json", "w", encoding="utf-8") as f:
+        with open(json_path, "w", encoding="utf-8") as f:
             json.dump(deck, f, indent=4, ensure_ascii=False)
 else:
     deck = fetchDeck()
-    if deck :
-        with open("deck.json", "w", encoding="utf-8") as f:
+    if deck:
+        with open(json_path, "w", encoding="utf-8") as f:
             json.dump(deck, f, indent=4, ensure_ascii=False)
