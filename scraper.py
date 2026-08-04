@@ -92,9 +92,10 @@ def get_stores_data(url_target, path):
 
     # adding all  store names in paralel
     store_names = []
+    edition_names = []
     for link in soup.select(" .store .name-ed"):
         clean_name = link.text.strip()
-        store_names.append(clean_name)
+        edition_names.append(clean_name)
 
     # hiding the cookie notification that clouds the view
     driver.execute_script(

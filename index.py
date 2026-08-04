@@ -16,10 +16,10 @@ for card_name in deck.keys():
     store_names = get_stores_data(card_name, screenshots_folder)
     count_total, count_errors, qnts, prices = get_price(screenshots_folder)
 
-    print(len(store_names))
-    print(len(qnts))
-    print(len(prices))
+    for store in store_names:
+        print(store)
 
+    break
     data = []
     for i in range(len(prices)):
         data.append(
@@ -36,7 +36,5 @@ for card_name in deck.keys():
     data = []
 
     # print(f"\nerros: {count_errors}/{count_total}")
-    print("pulando pra o fim")
-    break
 print("encerrando processo")
 driver.quit()
