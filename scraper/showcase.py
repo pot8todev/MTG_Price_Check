@@ -9,7 +9,7 @@ import time
 # Find the link
 
 
-def open_marketplace():
+def open_showcase():
 
     data = []
     link = driver.find_element(By.CSS_SELECTOR, "a.link-store")
@@ -25,6 +25,9 @@ def open_marketplace():
     print("worked!")
     time.sleep(10)
     hide_cookie()
+    # code here
+    # ----#
+    # ----#
     print("closing")
     # Close the new tab
     driver.close()
