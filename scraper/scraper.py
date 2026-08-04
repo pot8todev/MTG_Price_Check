@@ -1,23 +1,21 @@
-import os
-import time
-import shutil
-import random
-import requests
-
-from dotenv import load_dotenv
-from scraper.marketplace import open_marketplace
-from setup.aux_functions import hide_cookie
-from setup.driver_setup import driver
-from scraper.soup import tooltip_scrape
-
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import (
     TimeoutException,
     InvalidArgumentException,
     WebDriverException,
 )
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from scraper.soup import tooltip_scrape
+from setup.driver_setup import driver
+from setup.aux_functions import hide_cookie
+from scraper.showcase import open_showcase
+from dotenv import load_dotenv
+import requests
+import random
+import shutil
+import time
+import os
 
 
 def assure_new_folder(out_path):
@@ -89,22 +87,9 @@ def get_stores_data(url_target, path):
     except WebDriverException as e:
         print(f"WebDriver error: {e}")
 
-    # html_content = driver.page_source
-    # soup = BeautifulSoup(html_content, "html.parser")
-    #
-    #
-    # # adding all  store names in paralel
-    # store_names = []
-    # edition_names = []
-    # for link in soup.select(" .store .name-ed"):
-    #     clean_name = link.text.strip()
-    #     edition_names.append(clean_name)
-
-    # hiding the cookie notification that clouds the view
-
     hide_cookie()
-    # open_marketplace()
-    tooltip_scrape()
+    open_showcase()
+    stores_data = tooltip_scrape()
     return 0
 
     prices_html = driver.find_elements(By.CSS_SELECTOR, ".store .price-with-image")

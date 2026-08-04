@@ -3,6 +3,33 @@ from setup.driver_setup import driver
 
 
 # to get addresses
+def showcase_cards_per_store():
+    cards = []
+
+    soup = BeautifulSoup(driver.page_source, "html.parser")
+
+    container = soup.select_one(".container-stock")
+
+    if container is None:
+        print("No stock container found")
+        return cards
+
+    for stock in container.select(".stock"):
+        edition = stock.select_one(".name-ed")
+        quality = stock.select_one(".quality")
+
+        cards.append(
+            {
+                "edition": edition.get_text(strip=True) if edition else None,
+                "quality": quality.get("title") if quality else None,
+            }
+        )
+
+        print(cards[-1])
+
+    return cards
+
+
 def tooltip_scrape():
 
     soup = BeautifulSoup(driver.page_source, "html.parser")
@@ -22,4 +49,4 @@ def tooltip_scrape():
             }
         )
 
-    print(store_data)
+        return store_data
