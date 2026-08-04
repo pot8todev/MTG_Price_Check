@@ -88,9 +88,12 @@ def get_stores_data(url_target, path):
         print(f"WebDriver error: {e}")
 
     hide_cookie()
-    open_showcase()
-    stores_data = tooltip_scrape()
-    return 0
+
+    # store name, address, tel_num
+    stores_data = []
+    tooltip_scrape(stores_data)
+    for store in stores_data:
+        print(store)
 
     prices_html = driver.find_elements(By.CSS_SELECTOR, ".store .price-with-image")
     qnts_html = driver.find_elements(By.CSS_SELECTOR, ".store .quantity-with-image")
@@ -103,8 +106,7 @@ def get_stores_data(url_target, path):
         driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", price)
         price.screenshot(f"{path}/prices/price{i}.png")
         qnt.screenshot(f"{path}/quantities/qnt{i}.png")
-
-    # return edition_names
+    return stores_data
 
 
 OUTPUT_DIR = "out"

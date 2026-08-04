@@ -13,18 +13,17 @@ for card_name in deck.keys():
     screenshots_folder = f"{card_folder}/screenshots"
 
     os.makedirs(card_folder)  # ensure exists
-    edition_names = get_stores_data(card_name, screenshots_folder)
-    break
+    store_data = get_stores_data(card_name, screenshots_folder)
     count_total, count_errors, qnts, prices = get_price(screenshots_folder)
 
     data = []
     for i in range(len(prices)):
         data.append(
             {
-                "edition_name": edition_names[i],
+                "store_data": store_data[i],
                 "price": prices[i],
                 "qnt": qnts[i],
-                "timestamp": datetime.now().isoformat(),
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             }
         )
     json_path = f"{card_folder}/stores_data.json"

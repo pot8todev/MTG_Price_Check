@@ -30,11 +30,10 @@ def showcase_cards_per_store():
     return cards
 
 
-def tooltip_scrape():
+def tooltip_scrape(store_data):
 
     soup = BeautifulSoup(driver.page_source, "html.parser")
     stores = soup.select(".container-tooltip-store-information")
-    store_data = []
 
     for store in stores:
         name = store.select_one(".store-name span")
@@ -49,4 +48,4 @@ def tooltip_scrape():
             }
         )
 
-        return store_data
+    return store_data
