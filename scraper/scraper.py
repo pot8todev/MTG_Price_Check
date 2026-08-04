@@ -4,9 +4,11 @@ import shutil
 import random
 import requests
 
-from bs4 import BeautifulSoup
-from setup.driver_setup import driver
 from dotenv import load_dotenv
+from scraper.marketplace import open_marketplace
+from setup.aux_functions import hide_cookie
+from setup.driver_setup import driver
+from scraper.soup import tooltip_scrape
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -87,20 +89,23 @@ def get_stores_data(url_target, path):
     except WebDriverException as e:
         print(f"WebDriver error: {e}")
 
-    html_content = driver.page_source
-    soup = BeautifulSoup(html_content, "html.parser")
-
-    # adding all  store names in paralel
-    store_names = []
-    edition_names = []
-    for link in soup.select(" .store .name-ed"):
-        clean_name = link.text.strip()
-        edition_names.append(clean_name)
+    # html_content = driver.page_source
+    # soup = BeautifulSoup(html_content, "html.parser")
+    #
+    #
+    # # adding all  store names in paralel
+    # store_names = []
+    # edition_names = []
+    # for link in soup.select(" .store .name-ed"):
+    #     clean_name = link.text.strip()
+    #     edition_names.append(clean_name)
 
     # hiding the cookie notification that clouds the view
-    driver.execute_script(
-        "document.getElementById('lgpd-cookie').style.display = 'none';"
-    )
+
+    hide_cookie()
+    # open_marketplace()
+    tooltip_scrape()
+    return 0
 
     prices_html = driver.find_elements(By.CSS_SELECTOR, ".store .price-with-image")
     qnts_html = driver.find_elements(By.CSS_SELECTOR, ".store .quantity-with-image")
@@ -114,7 +119,7 @@ def get_stores_data(url_target, path):
         price.screenshot(f"{path}/prices/price{i}.png")
         qnt.screenshot(f"{path}/quantities/qnt{i}.png")
 
-    return store_names
+    # return edition_names
 
 
 OUTPUT_DIR = "out"

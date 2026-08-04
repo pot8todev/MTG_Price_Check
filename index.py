@@ -2,7 +2,7 @@ import os
 import json
 from datetime import datetime
 from OCR.OCR import get_price
-from scraper import get_stores_data
+from scraper.scraper import get_stores_data
 from setup.deck_setup import deck
 from setup.driver_setup import driver
 
@@ -13,18 +13,15 @@ for card_name in deck.keys():
     screenshots_folder = f"{card_folder}/screenshots"
 
     os.makedirs(card_folder)  # ensure exists
-    store_names = get_stores_data(card_name, screenshots_folder)
+    edition_names = get_stores_data(card_name, screenshots_folder)
+    break
     count_total, count_errors, qnts, prices = get_price(screenshots_folder)
 
-    for store in store_names:
-        print(store)
-
-    break
     data = []
     for i in range(len(prices)):
         data.append(
             {
-                "store_name": store_names[i],
+                "edition_name": edition_names[i],
                 "price": prices[i],
                 "qnt": qnts[i],
                 "timestamp": datetime.now().isoformat(),
