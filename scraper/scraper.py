@@ -1,14 +1,14 @@
 from selenium.common.exceptions import (
     TimeoutException,
-    InvalidArgumentException,
     WebDriverException,
+    InvalidArgumentException,
 )
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from scraper.soup import tooltip_scrape
 from setup.driver_setup import driver
-from setup.aux_functions import hide_cookie
+from setup.aux_functions import hide_cookie, screenshot_data
 from scraper.showcase import open_showcase
 from dotenv import load_dotenv
 import requests
@@ -18,19 +18,16 @@ import time
 import os
 
 
-def assure_new_folder(out_path):
-    # Recria a pasta principal
-    if os.path.exists(out_path):
-        shutil.rmtree(out_path)
+OUTPUT_DIR = "out"
+def assure_new_folder(dir):
+    if os.path.exists(dir):
+        shutil.rmtree(dir)
 
-    os.makedirs(out_path)
+    if dir != OUTPUT_DIR:
+        os.makedirs(os.path.join(dir, "quantities"))
+        os.makedirs(os.path.join(dir, "prices"))
 
-    # to reset folders properly
-    if out_path != "out":
-        # Cria as subpastas
-        os.makedirs(os.path.join(out_path, "quantities"))
-        os.makedirs(os.path.join(out_path, "prices"))
-
+assure_new_folder(OUTPUT_DIR)
 
 def url_formatter(url_base, url_target):
     return url_base + url_target.title().replace(" ", "+")
@@ -61,7 +58,7 @@ def fetch(url):
     return response
 
 
-def get_stores_data(url_target, path):
+def get_stores_data(url_target, out):
 
     load_dotenv()
 
@@ -92,22 +89,8 @@ def get_stores_data(url_target, path):
     # store name, address, tel_num
     stores_data = []
     tooltip_scrape(stores_data)
-    for store in stores_data:
-        print(store)
-
-    prices_html = driver.find_elements(By.CSS_SELECTOR, ".store .price-with-image")
-    qnts_html = driver.find_elements(By.CSS_SELECTOR, ".store .quantity-with-image")
-    assure_new_folder(path)
-
-    for i, (price, qnt) in enumerate(zip(prices_html, qnts_html)):
-        time.sleep(1)
-
-        # Role a página até o elemento p e coloque ele no centro da tela.
-        driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", price)
-        price.screenshot(f"{path}/prices/price{i}.png")
-        qnt.screenshot(f"{path}/quantities/qnt{i}.png")
+    assure_new_folder(out)
+    screenshot_data(out)
     return stores_data
 
 
-OUTPUT_DIR = "out"
-assure_new_folder(OUTPUT_DIR)
