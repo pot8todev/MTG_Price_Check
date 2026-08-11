@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from setup.driver_setup import driver
-from setup.aux_functions import hide_cookie
+from setup.aux_functions import hide_cookie,screenshot_data
 from bs4 import BeautifulSoup
 
 import time
@@ -9,40 +9,26 @@ import time
 # Find the link
 
 tabs = []
-curr_tab = driver.current_window_handle
-tabs.append(curr_tab)
 
-
-def open_store_showcase():
-    link = driver.find_element(By.CSS_SELECTOR, "a.link-store")
-    url = link.get_attribute("href")
-    if  not url:  
+def open_store_showcase(url, original_tab, out):
+    if not url:
         return
 
-    # Save the current tab
-    original_tab = driver.current_window_handle
-
-    # Open the link in a new tab
     driver.switch_to.new_window("tab")
-    curr_tab = driver.current_window_handle
-    tabs.append(curr_tab)
-    
+    store_tab = driver.current_window_handle
 
     driver.get(url)
 
     time.sleep(3)
     hide_cookie()
-    driver.switch_to.new_window(original_tab)
-    # code here
-    # ----#
+    screenshot_data(out)
 
-    # ----#
+    # Go back to the original tab
+    driver.switch_to.window(original_tab)
 
+    # Now close the store tab
+    driver.switch_to.window(store_tab)
+    driver.close()
 
-def close_tab():
-    if len(tabs)>0:
-        driver.close()
-        print("closing")
-        # Return to the original tab
-        original_tab = tabs[0]
-        driver.switch_to.window(original_tab)
+    # Return to original
+    driver.switch_to.window(original_tab)

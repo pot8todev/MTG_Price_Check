@@ -46,13 +46,23 @@ def tooltip_scrape(stores_data):
         url = store.select_one(".btn-showcase a")
 
         name = name.get_text(strip=True) if name else ""
+
         if is_new_store(stores_data, name):
+            if url:
+                reduced_url = url.get("href")
+                if isinstance(reduced_url, str):
+                    showcase_url = "https://www.ligamagic.com.br" + reduced_url[1:]
+                else:
+                    showcase_url = None
+            else:
+                print("no url")
+                showcase_url = None
             stores_data.append(
                 {
                     "name": name,
                     "address": address.get_text(strip=True) if address else "",
-                    "phone": phone.get_text(strip=True) if phone else None,
-                    "url":url.get("href") if url else None,
+                    "phone": phone.get_text(strip=True) if phone else "(xx)xxxx-xxx",
+                    "showcase_url":showcase_url
 
                 }
             )

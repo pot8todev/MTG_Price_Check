@@ -59,7 +59,7 @@ def fetch(url):
 
 
 
-def get_stores_data(url_target, out):
+def get_stores_data(url_target, output_folder):
     load_dotenv()
 
     url_base = os.getenv("BASE_URL", "https://localhost8000.com/")
@@ -85,10 +85,17 @@ def get_stores_data(url_target, out):
         print(f"WebDriver error: {e}")
 
     hide_cookie()
-
-    # store name, address, tel_num
+    # store name, address, tel_num, showcase_url
     stores_data = []
     tooltip_scrape(stores_data)
+    original_tab = driver.current_window_handle
+    for store in stores_data:
+        url = store.get("showcase_url")
+
+        if url:
+            open_store_showcase(url, original_tab,output_folder)
+    assure_new_folder(output_folder)
+
     return stores_data
 
 
