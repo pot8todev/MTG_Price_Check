@@ -6,7 +6,7 @@ from scraper.scraper import get_stores_data
 from setup.deck_setup import deck
 from setup.driver_setup import driver
 
-for card_name in deck.keys():
+for card_name in deck:
     # card name is its own folder's name
     folderName = card_name.title().replace(" ", "")
     card_folder = f"out/{folderName}"
