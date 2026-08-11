@@ -9,7 +9,7 @@ from selenium.webdriver.common.by import By
 from scraper.soup import tooltip_scrape
 from setup.driver_setup import driver
 from setup.aux_functions import hide_cookie, screenshot_data
-from scraper.showcase import open_showcase
+from scraper.showcase import open_store_showcase
 from dotenv import load_dotenv
 import requests
 import random
@@ -58,8 +58,8 @@ def fetch(url):
     return response
 
 
-def get_stores_data(url_target, out):
 
+def get_stores_data(url_target, out):
     load_dotenv()
 
     url_base = os.getenv("BASE_URL", "https://localhost8000.com/")
@@ -89,8 +89,6 @@ def get_stores_data(url_target, out):
     # store name, address, tel_num
     stores_data = []
     tooltip_scrape(stores_data)
-    assure_new_folder(out)
-    screenshot_data(out)
     return stores_data
 
 
