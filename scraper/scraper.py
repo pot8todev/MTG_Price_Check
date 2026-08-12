@@ -9,7 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from setup.driver_setup import driver
-from setup.aux_functions import hide_cookie
+from setup.aux_functions import hide_cookie ,start_timer, mark_timer
 from setup.objects.classes import Card,Stock,Store
 from scraper.soup import tooltip_scrape, soup_stock
 from scraper.showcase import open_store_showcase, open_new_tab,close_tab
@@ -90,7 +90,9 @@ def get_stores_data(url_target:str, output_folder:str):
 
     hide_cookie()
     # store_data: name, address, tel_num, showcase_url
+    start = start_timer()
     stores = tooltip_scrape()
+    mark_timer(start,"tooltip scrape in:")
     original_tab = driver.current_window_handle
     # TODO:slyghtly uneficient
     open_new_tab()

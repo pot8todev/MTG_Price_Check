@@ -1,12 +1,16 @@
 
 from bs4 import BeautifulSoup
+from bs4.filter import MatchRule
 from setup.driver_setup import driver
 from setup.objects.classes import Store, Stock, Card
-from setup.aux_functions import is_new_store, parse_price , parse_qnt
+from setup.aux_functions import is_new_store, parse_price , parse_qnt, start_timer, mark_timer
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 
 def tooltip_scrape()  :
     stores_data:list[Store] = []
-    soup = BeautifulSoup(driver.page_source, "html.parser")
+    html = driver.page_source
+    soup = BeautifulSoup(html, "lxml")
     stores_tooltip = soup.select(".container-tooltip-store-information")
 
     for store in stores_tooltip:
@@ -43,24 +47,38 @@ def tooltip_scrape()  :
     return stores_data
 
 # to get cards in stores, stock
-def soup_stock():
+def soup_stock()->list[Stock]:
     stocks:list[Stock] = []
-    soup = BeautifulSoup(driver.page_source, "html.parser")
+    start = start_timer()
 
-    container = soup.select_one(".container-stock")
+    try:
+        #finding a way smaller part of the html
+        container = driver.find_element(
+        By.CSS_SELECTOR,
+        ".container-single-card.container-first-item"
+    ) 
+    except NoSuchElementException:
+        print("No stock container found")
+        return stocks
+    html = container.get_attribute("outerHTML")
+    soup = BeautifulSoup(html, "lxml")
+    mark_timer(start,"lxml parser:")
+
     name = soup.select_one(".name-en")
+    mark_timer(start,"found card name:")
     name = name.get_text(strip=True)if name else ""
 
     if container is None:
         print("No stock container found")
         return stocks
 
-    for stock in container.select(".stock"):
+    for stock in soup.select(".stock"):
         price = stock.select_one(".price")
         qnt = stock.select_one(".quantity")
         edition = stock.select_one(".name-ed")
         quality = stock.select_one(".quality")
         language = stock.select_one("img[title]")
+        mark_timer(start,"found rest of the attibutes:")
 
         card = Card(
             name=name,
@@ -74,7 +92,7 @@ def soup_stock():
         stocks.append(
             Stock(
                 card=card,
-                qnt= parse_qnt(qnt)if qnt else -1
+                qnt= parse_qnt(qnt)
             )
         )
 

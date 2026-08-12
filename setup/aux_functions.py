@@ -23,19 +23,26 @@ def parse_price(price_element) -> float | None:
     text = text.split()[-1]
     text.find(" ")
 
-    print(text)
+    # print(text)
 
     return float(text)
-def parse_qnt(qnt_element) -> int | None:
-    if not qnt_element:
-        return None
+def parse_qnt(qnt_element) -> int :
 
     text = qnt_element.get_text(strip=True)
     text = text.replace("de", "").strip()
     text = text.replace(" ", "")
     text = text.split()[-1]
     text.find(" ")
-    print(text)
+    # print(text)
+
+    text = int(text)
+    text = text if text is not None else -1
+    return text
 
 
-    return int(text)
+def start_timer()->float:
+    return time.perf_counter()
+def mark_timer(start:float, message:str):
+    print(f"{message} {time.perf_counter() - start:.4f}s")
+
+

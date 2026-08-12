@@ -3,9 +3,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from setup.driver_setup import driver
-from setup.aux_functions import hide_cookie
+from setup.aux_functions import hide_cookie, start_timer, mark_timer
 from scraper.soup import soup_stock
-from bs4 import BeautifulSoup
 
 import time
 
@@ -29,11 +28,14 @@ def open_store_showcase(url:str):
         return
     driver.get(url)
 
+    start = start_timer()
     WebDriverWait(driver, 5).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, ".container-stock"))
     )
-
+    mark_timer(start,"page loaded in:")
     hide_cookie()
+
+    print(".")
     stock = soup_stock()
     # Now close the store tab
     if stock :
