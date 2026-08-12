@@ -11,6 +11,7 @@ from setup.aux_functions import hide_cookie ,start_timer, mark_timer
 from scraper.soup import tooltip_scrape
 from scraper.showcase import open_store_showcase, open_new_tab,close_tab
 from dotenv import load_dotenv
+from pathlib import Path
 import requests
 import random
 import shutil
@@ -18,16 +19,8 @@ import time
 import os
 
 
-OUTPUT_DIR = "out"
-def assure_new_folder(dir):
-    if os.path.exists(dir):
-        shutil.rmtree(dir)
 
-    if dir != OUTPUT_DIR:
-        os.makedirs(os.path.join(dir, "quantities"))
-        os.makedirs(os.path.join(dir, "prices"))
 
-assure_new_folder(OUTPUT_DIR)
 
 def url_formatter(url_base, url_target):
     return url_base + url_target.title().replace(" ", "+").replace("'","%27")
@@ -58,7 +51,7 @@ def fetch(url):
 
 
 
-def get_stores_data(url_target:str, output_folder:str):
+def get_stores_data(url_target:str, output_folder:str,driver):
     load_dotenv()
 
     url_base = os.getenv("BASE_URL", "https://localhost8000.com/")
@@ -103,7 +96,6 @@ def get_stores_data(url_target:str, output_folder:str):
                 store.stock.extend(stock)
 
     close_tab(original_tab)
-    assure_new_folder(output_folder)
     
 
     return stores

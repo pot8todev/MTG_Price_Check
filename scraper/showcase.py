@@ -2,7 +2,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from setup.driver_setup import driver
 from setup.aux_functions import hide_cookie, start_timer, mark_timer
 from scraper.soup import soup_stock
 
@@ -23,7 +22,7 @@ def close_tab(original_tab):
     driver.close()
     driver.switch_to.window(original_tab)
 
-def open_store_showcase(url:str):
+def open_store_showcase(url:str, driver):
     if not url:
         return
     driver.get(url)
