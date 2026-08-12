@@ -24,6 +24,7 @@ To allow Selenium to reuse your logged-in Chrome session
 start Chrome with remote debugging enabled.
 
 
+
 ```bash
 BASE_URL="https://www.ligamagic.com.br/?view=cards/card&card="
 TARGET_URL=<yourMtgGoldfishURLhere>
