@@ -12,7 +12,7 @@ from setup.driver_setup import driver
 from setup.aux_functions import hide_cookie
 from setup.objects.classes import Card,Stock,Store
 from scraper.soup import tooltip_scrape, soup_stock
-from scraper.showcase import open_store_showcase
+from scraper.showcase import open_store_showcase, open_new_tab,close_tab
 from dotenv import load_dotenv
 import requests
 import random
@@ -62,7 +62,7 @@ def fetch(url):
 
 
 
-def get_stores_data(url_target, output_folder):
+def get_stores_data(url_target:str, output_folder:str):
     load_dotenv()
 
     url_base = os.getenv("BASE_URL", "https://localhost8000.com/")
@@ -90,15 +90,23 @@ def get_stores_data(url_target, output_folder):
 
     hide_cookie()
     # store_data: name, address, tel_num, showcase_url
-
-
     stores = tooltip_scrape()
     original_tab = driver.current_window_handle
+    # TODO:slyghtly uneficient
+    open_new_tab()
+
     for store in stores:
         url = store.showcase_url
+
         if url:
-            store.stock.append(open_store_showcase(url, original_tab,output_folder))
+            stock = open_store_showcase( url)
+
+            if stock is not None:
+                store.stock.extend(stock)
+
+    close_tab(original_tab)
     assure_new_folder(output_folder)
+    
 
     return stores
 

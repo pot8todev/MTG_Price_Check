@@ -1,5 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 from setup.driver_setup import driver
 from setup.aux_functions import hide_cookie
 from scraper.soup import soup_stock
@@ -9,27 +11,32 @@ import time
 
 # Find the link
 
-tabs = []
+new_tabs = []
 
-def open_store_showcase(url, original_tab, out):
+def open_new_tab():
+    driver.switch_to.new_window("tab")
+    tab = driver.current_window_handle
+    new_tabs.append(tab)
+
+
+def close_tab(original_tab):
+    new_tabs.pop()
+    driver.close()
+    driver.switch_to.window(original_tab)
+
+def open_store_showcase(url:str):
     if not url:
         return
-
-    driver.switch_to.new_window("tab")
-    store_tab = driver.current_window_handle
-
     driver.get(url)
 
-    time.sleep(3)
+    WebDriverWait(driver, 5).until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, ".container-stock"))
+    )
+
     hide_cookie()
-    soup_stock()
-
-    # Go back to the original tab
-    driver.switch_to.window(original_tab)
-
+    stock = soup_stock()
     # Now close the store tab
-    driver.switch_to.window(store_tab)
-    driver.close()
-
-    # Return to original
-    driver.switch_to.window(original_tab)
+    if stock :
+        print(".")
+        return stock
+    

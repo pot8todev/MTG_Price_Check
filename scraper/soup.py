@@ -2,10 +2,7 @@
 from bs4 import BeautifulSoup
 from setup.driver_setup import driver
 from setup.objects.classes import Store, Stock, Card
-from setup.aux_functions import is_new_store
-
-
-
+from setup.aux_functions import is_new_store, parse_price , parse_qnt
 
 def tooltip_scrape()  :
     stores_data:list[Store] = []
@@ -60,14 +57,14 @@ def soup_stock():
 
     for stock in container.select(".stock"):
         price = stock.select_one(".price")
-        qnt = stock.select_one(".qnt")
+        qnt = stock.select_one(".quantity")
         edition = stock.select_one(".name-ed")
         quality = stock.select_one(".quality")
         language = stock.select_one("img[title]")
 
         card = Card(
             name=name,
-            price=float(price.get_text(strip=True)) if price else None,
+            price=parse_price(price) if price else None,
             edition=edition.get_text(strip=True) if edition else None,
             quality=str(quality.get("title")) if quality else None,
             language=str(language.get("title")) if language else None
@@ -77,10 +74,9 @@ def soup_stock():
         stocks.append(
             Stock(
                 card=card,
-                qnt=int(qnt.get_text(strip=True)[3:]) if qnt else -1
+                qnt= parse_qnt(qnt)if qnt else -1
             )
         )
 
 
     return stocks
-    return stores_data
