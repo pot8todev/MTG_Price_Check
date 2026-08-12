@@ -15,10 +15,6 @@ Install dependencies:
 ```bash
 pip install -r setup/requirements.txt
 ```
-this code uses pytesseract, that requires tesseract to be installed in your machine, so install using you prefered package manager
-```bash
-brew install tesseract
-```
 
 
 ## ⚙️ Configuration
@@ -26,15 +22,6 @@ brew install tesseract
 To allow Selenium to reuse your logged-in Chrome session
 (for example, to bypass repeated logins or Cloudflare checks),
 start Chrome with remote debugging enabled.
-
-### macOS
-
-```bash
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
---remote-debugging-port=9222 \
---user-data-dir="$HOME/chrome-debug"
-Create a .env file in the project root:
-```
 
 
 ```bash
@@ -50,7 +37,7 @@ TARGET_URL → MTGGoldfish deck or archetype page to scrape
 Run the project with:
 
 ```
-python -m index
+python index.py
 ```
 
 
