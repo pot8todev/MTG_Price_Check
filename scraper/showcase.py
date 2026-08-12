@@ -1,7 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from setup.driver_setup import driver
-from setup.aux_functions import hide_cookie,screenshot_data
+from setup.aux_functions import hide_cookie
+from scraper.soup import soup_stock
 from bs4 import BeautifulSoup
 
 import time
@@ -21,7 +22,7 @@ def open_store_showcase(url, original_tab, out):
 
     time.sleep(3)
     hide_cookie()
-    screenshot_data(out)
+    soup_stock()
 
     # Go back to the original tab
     driver.switch_to.window(original_tab)

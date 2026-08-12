@@ -1,3 +1,5 @@
+import dataclasses
+
 from selenium.common.exceptions import (
     TimeoutException,
     WebDriverException,
@@ -6,9 +8,10 @@ from selenium.common.exceptions import (
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
-from scraper.soup import tooltip_scrape
 from setup.driver_setup import driver
-from setup.aux_functions import hide_cookie, screenshot_data
+from setup.aux_functions import hide_cookie
+from setup.objects.classes import Card,Stock,Store
+from scraper.soup import tooltip_scrape, soup_stock
 from scraper.showcase import open_store_showcase
 from dotenv import load_dotenv
 import requests
@@ -30,7 +33,7 @@ def assure_new_folder(dir):
 assure_new_folder(OUTPUT_DIR)
 
 def url_formatter(url_base, url_target):
-    return url_base + url_target.title().replace(" ", "+")
+    return url_base + url_target.title().replace(" ", "+").replace("'","%27")
 
 
 def fetch(url):
@@ -71,6 +74,7 @@ def get_stores_data(url_target, output_folder):
         driver.set_page_load_timeout(50)
         driver.get(url)
 
+        # TODO: change the waiting requirement
         WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.CLASS_NAME, "price-with-image"))
         )
@@ -85,17 +89,17 @@ def get_stores_data(url_target, output_folder):
         print(f"WebDriver error: {e}")
 
     hide_cookie()
-    # store name, address, tel_num, showcase_url
-    stores_data = []
-    tooltip_scrape(stores_data)
-    original_tab = driver.current_window_handle
-    for store in stores_data:
-        url = store.get("showcase_url")
+    # store_data: name, address, tel_num, showcase_url
 
+
+    stores = tooltip_scrape()
+    original_tab = driver.current_window_handle
+    for store in stores:
+        url = store.showcase_url
         if url:
-            open_store_showcase(url, original_tab,output_folder)
+            store.stock.append(open_store_showcase(url, original_tab,output_folder))
     assure_new_folder(output_folder)
 
-    return stores_data
+    return stores
 
 
