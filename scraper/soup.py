@@ -1,9 +1,8 @@
 
 from bs4 import BeautifulSoup
-from bs4.filter import MatchRule
 from setup.driver_setup import driver
 from setup.objects.classes import Store, Stock, Card
-from setup.aux_functions import is_new_store, parse_price , parse_qnt, start_timer, mark_timer
+from setup.aux_functions import is_new_store, parse_price , parse_qnt
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
@@ -49,7 +48,6 @@ def tooltip_scrape()  :
 # to get cards in stores, stock
 def soup_stock()->list[Stock]:
     stocks:list[Stock] = []
-    start = start_timer()
 
     try:
         #finding a way smaller part of the html
@@ -60,12 +58,15 @@ def soup_stock()->list[Stock]:
     except NoSuchElementException:
         print("No stock container found")
         return stocks
+
     html = container.get_attribute("outerHTML")
+    if  html is None :
+        return stocks
+
     soup = BeautifulSoup(html, "lxml")
-    mark_timer(start,"lxml parser:")
+    
 
     name = soup.select_one(".name-en")
-    mark_timer(start,"found card name:")
     name = name.get_text(strip=True)if name else ""
 
     if container is None:
@@ -78,7 +79,6 @@ def soup_stock()->list[Stock]:
         edition = stock.select_one(".name-ed")
         quality = stock.select_one(".quality")
         language = stock.select_one("img[title]")
-        mark_timer(start,"found rest of the attibutes:")
 
         card = Card(
             name=name,

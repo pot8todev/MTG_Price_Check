@@ -28,15 +28,14 @@ def open_store_showcase(url:str):
         return
     driver.get(url)
 
-    start = start_timer()
     WebDriverWait(driver, 5).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, ".container-stock"))
     )
-    mark_timer(start,"page loaded in:")
     hide_cookie()
 
-    print(".")
+    start = start_timer()
     stock = soup_stock()
+    mark_timer(start,"page scraped in:")
     # Now close the store tab
     if stock :
         print(".")

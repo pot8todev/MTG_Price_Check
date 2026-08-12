@@ -44,12 +44,12 @@ def start_timer()->float:
     return time.perf_counter()
 def mark_timer(start:float, message:str|None):
     print(f"{message} {time.perf_counter() - start:.4f}s")
+    
 def function_timer(f, message:str|None) :
     start = start_timer()
     out = f()
     mark_timer(start,message)
     return out
-    
 
 
 

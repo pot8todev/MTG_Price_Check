@@ -1,5 +1,3 @@
-import dataclasses
-
 from selenium.common.exceptions import (
     TimeoutException,
     WebDriverException,
@@ -10,8 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from setup.driver_setup import driver
 from setup.aux_functions import hide_cookie ,start_timer, mark_timer
-from setup.objects.classes import Card,Stock,Store
-from scraper.soup import tooltip_scrape, soup_stock
+from scraper.soup import tooltip_scrape
 from scraper.showcase import open_store_showcase, open_new_tab,close_tab
 from dotenv import load_dotenv
 import requests
@@ -48,7 +45,6 @@ def fetch(url):
             "Chrome/124.0 Safari/537.36"
         )
     }
-    time.sleep(random.uniform(2, 5))  # slow down
 
     response = session.get(url, headers=headers, timeout=20)
 
