@@ -1,6 +1,7 @@
 import os
 import json
 import re
+import csv
 
 from pathlib import Path
 from dataclasses import asdict
@@ -12,6 +13,36 @@ from setup.aux_functions import start_timer, mark_timer
 
 def sanitize_store_name(name):
     return re.sub(r"[^\w\s-]", "_", name, flags=re.UNICODE).strip()
+
+
+def write_stock_csv():
+    stores = {}
+    all_cards = set()
+
+    for json_file in out_path.glob("*.json"):
+        with open(json_file, "r", encoding="utf-8") as f:
+            stock = json.load(f)
+
+        quantities = {}
+        for item in stock:
+            card_name = item["card"]["name"]
+            if not card_name:
+                continue
+            quantities[card_name] = quantities.get(card_name, 0) + item["qnt"]
+            all_cards.add(card_name)
+
+        stores[json_file.stem] = quantities
+
+    cards = sorted(all_cards)
+
+    with open(out_path / "stores_data.csv", "w", encoding="utf-8", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(["store name", "cards in stock", *cards])
+        for store_name in sorted(stores):
+            quantities = stores[store_name]
+            row_values = [quantities.get(card, "") for card in cards]
+            populated = sum(1 for value in row_values if value != "")
+            writer.writerow([store_name, populated, *row_values])
 
 
 start = start_timer()
@@ -44,5 +75,7 @@ else:
 
     mark_timer(start, "whole scraping took")
     scraper.close()
+
+write_stock_csv()
 
 print("encerrando processo")

@@ -8,6 +8,7 @@ class Card:
     edition: str | None
     quality: str | None
     language: str | None
+    url: str | None = None
 
 @dataclass
 class Stock:

@@ -67,9 +67,11 @@ def soup_stock(driver)->list[Stock]:
     name = soup.select_one(".name-en")
     name = name.get_text(strip=True)if name else ""
 
-    if container is None:
-        print("No stock container found")
+    if not name:
+        print("No card name found")
         return stocks
+
+    url = driver.current_url
 
     for stock in soup.select(".stock"):
         price = stock.select_one(".price")
@@ -83,7 +85,8 @@ def soup_stock(driver)->list[Stock]:
             price=parse_price(price) if price else None,
             edition=edition.get_text(strip=True) if edition else None,
             quality=str(quality.get("title")) if quality else None,
-            language=str(language.get("title")) if language else None
+            language=str(language.get("title")) if language else None,
+            url=url
         )
 
         # XXX: returns -1 if qnt not found, dangerous
