@@ -50,7 +50,7 @@ def fetch(url):
 
 
 
-def get_stores_data(driver,url_target:str, output_folder:str):
+def get_stores_data(driver,url_target:str):
     load_dotenv()
 
     url_base = os.getenv("BASE_URL", "https://localhost8000.com/")
