@@ -1,12 +1,11 @@
 
 from bs4 import BeautifulSoup
-from setup.driver_setup import driver
 from setup.objects.classes import Store, Stock, Card
 from setup.aux_functions import is_new_store, parse_price , parse_qnt
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
-def tooltip_scrape()  :
+def tooltip_scrape(driver)  :
     stores_data:list[Store] = []
     html = driver.page_source
     soup = BeautifulSoup(html, "lxml")
@@ -44,9 +43,8 @@ def tooltip_scrape()  :
             )
 
     return stores_data
-
 # to get cards in stores, stock
-def soup_stock()->list[Stock]:
+def soup_stock(driver)->list[Stock]:
     stocks:list[Stock] = []
 
     try:

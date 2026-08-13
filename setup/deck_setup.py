@@ -1,11 +1,11 @@
-from setup.driver_setup import driver
+from setup.driver_setup import Scraper
 from selenium.webdriver.common.by import By
 from dotenv import load_dotenv
 import os
 import json
 
 
-def fetchDeck():
+def fetchDeck(driver):
 
     load_dotenv()
     url = os.getenv(
@@ -40,16 +40,26 @@ def fetchDeck():
 
 
 json_path = "setup/deck.json"
+
+
+def _fetch_deck():
+    scraper = Scraper()
+    try:
+        return fetchDeck(scraper.driver)
+    finally:
+        scraper.close()
+
+
 if os.path.exists(json_path):
     try:
         with open(json_path, "r", encoding="utf-8") as f:
             deck = json.load(f)
     except json.JSONDecodeError:
-        deck = fetchDeck()
+        deck = _fetch_deck()
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(deck, f, indent=4, ensure_ascii=False)
 else:
-    deck = fetchDeck()
+    deck = _fetch_deck()
     if deck:
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(deck, f, indent=4, ensure_ascii=False)

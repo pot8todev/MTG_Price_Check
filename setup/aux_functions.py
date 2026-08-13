@@ -1,9 +1,8 @@
-from setup.driver_setup import driver
 from setup.objects.classes import Card,Stock,Store
 import time
 
 
-def hide_cookie():
+def hide_cookie(driver):
     driver.execute_script(
         "document.getElementById('lgpd-cookie').style.display = 'none';"
     )

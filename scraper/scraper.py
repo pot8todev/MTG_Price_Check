@@ -6,8 +6,7 @@ from selenium.common.exceptions import (
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
-from setup.driver_setup import driver
-from setup.aux_functions import hide_cookie ,start_timer, mark_timer
+from setup.aux_functions import start_timer, mark_timer
 from scraper.soup import tooltip_scrape
 from scraper.showcase import open_store_showcase, open_new_tab,close_tab
 from dotenv import load_dotenv
@@ -51,7 +50,7 @@ def fetch(url):
 
 
 
-def get_stores_data(url_target:str, output_folder:str,driver):
+def get_stores_data(driver,url_target:str, output_folder:str):
     load_dotenv()
 
     url_base = os.getenv("BASE_URL", "https://localhost8000.com/")
@@ -77,25 +76,24 @@ def get_stores_data(url_target:str, output_folder:str,driver):
     except WebDriverException as e:
         print(f"WebDriver error: {e}")
 
-    hide_cookie()
     # store_data: name, address, tel_num, showcase_url
     start = start_timer()
-    stores = tooltip_scrape()
+    stores = tooltip_scrape(driver)
     mark_timer(start,"tooltip scrape in:")
     original_tab = driver.current_window_handle
     # TODO:slyghtly uneficient
-    open_new_tab()
+    open_new_tab(driver)
 
     for store in stores:
         url = store.showcase_url
 
         if url:
-            stock = open_store_showcase( url)
+            stock = open_store_showcase(driver, url)
 
             if stock is not None:
                 store.stock.extend(stock)
 
-    close_tab(original_tab)
+    close_tab(driver, original_tab)
     
 
     return stores
