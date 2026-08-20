@@ -1,11 +1,14 @@
 from setup.objects.classes import Card,Stock,Store
 import time
-
+import re
 
 def hide_cookie(driver):
     driver.execute_script(
         "document.getElementById('lgpd-cookie').style.display = 'none';"
     )
+
+def sanitize_store_name(name)->str:
+    return re.sub(r"[^\w\s-]", "_", name, flags=re.UNICODE).strip()
 
 def is_new_store(stores_data:list[Store], name:str):
     for store in stores_data:

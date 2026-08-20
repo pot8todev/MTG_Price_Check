@@ -1,5 +1,15 @@
 
 from dataclasses import dataclass, field
+from dataclasses import dataclass
+
+@dataclass
+
+class Wish_card:
+    quantity: int
+    mana_cost: str
+    price: str
+    image: str
+    url: str
 
 @dataclass
 class Card:
@@ -21,4 +31,5 @@ class Store:
     address: str | None
     tel_num: str | None
     showcase_url: str | None
+    diversity: int = 0
     stock: list[Stock] = field(default_factory=list)
