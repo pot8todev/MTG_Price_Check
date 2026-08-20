@@ -5,26 +5,28 @@
 - [ ] do algorithim of best_stores_order
     - [x] diversity parameter working
     - [ ] pick the x more diverse stores
+    - [ ] check the orders required quantity
 
 ## 🟡 Medium Priority
+   - [ ] parar de pegar lojas quando o preco ficar mais alto
+   - [ ]
 
-- [ ] Refactor `get_stores_data()`
-- [ ] Add type hints to scraper functions
-- [ ] Add CSV export
 
 ## 🟢 Low Priority
 
-- [ ] Clean up unused imports
-- [ ] Improve scraper performance
+Clean up unused imports
+- [ ] Improve scraper performance by using google collab
 - [ ] Improve variable names
 - [ ] fetch_deck closes driver instead of using the same one
+- [ ] skip basic lands
+- [ ] Refactor `get_stores_data()`
+- [ ] Add CSV export
 
 ## 🐛 Bugs
 
 
 ## 💡 Ideas
 
-- [ ] Add command-line arguments
 - [ ] Run multiple card scrapes concurrently
 - [ ] make the wish_deck input more generic
 
