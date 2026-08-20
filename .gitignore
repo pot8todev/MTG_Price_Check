@@ -1,6 +1,5 @@
 .DS_Store
 .venv/
-TODO.md
 out/
 __pycache__
 .env
