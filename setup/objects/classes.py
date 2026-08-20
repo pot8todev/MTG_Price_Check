@@ -5,7 +5,7 @@ from dataclasses import dataclass
 @dataclass
 
 class Wish_card:
-    quantity: int
+    qnt: int
     mana_cost: str
     price: str
     image: str

@@ -1,12 +1,16 @@
 from setup.driver_setup import Scraper
 from selenium.webdriver.common.by import By
 from dotenv import load_dotenv
-from setup.objects.classes import Wish_card
+from setup.objects.classes import Wish_card, Store
 import os
 import json
 
+# def if has_the_whole_card_order(wish_card_name: str,wish_card:Wish_card, store:Store):
+#     qnt = wish_card.qnt
 
-def fetch_wish_deck(driver)->dict[str,Wish_card]:
+
+
+def fetch_wish_deck(driver):
 
     load_dotenv()
     url = os.getenv(
@@ -20,7 +24,7 @@ def fetch_wish_deck(driver)->dict[str,Wish_card]:
     wish_deck = {}
 
     for row in rows:
-        quantity = row.get_attribute("data-card-quantity")
+        qnt = row.get_attribute("data-card-quantity")
         name = row.get_attribute("data-card-name")
         image = row.get_attribute("data-card-image")
         url = row.get_attribute("data-card-url")
@@ -30,19 +34,17 @@ def fetch_wish_deck(driver)->dict[str,Wish_card]:
         mana_cost = tds[2].text
         price = tds[3].text
 
-        wish_deck[name] = Wish_card(
-            quantity=int(quantity),
-            mana_cost=mana_cost,
-            price=price,
-            image=image,
-            url=url,
-        )
+        wish_deck[name] = {
+            "qnt": qnt,
+            "mana_cost": mana_cost,
+            "price": price,
+            "image": image,
+            "url": url,
+        }
 
     return wish_deck
 
 json_path = "setup/deck.json"
-
-
 
 
 
@@ -61,7 +63,7 @@ if os.path.exists(json_path):
             deck_data = json.load(f)
             wish_deck = {
                 name: Wish_card(
-                    quantity=int(wish_card_data["quantity"]),
+                    qnt=int(wish_card_data["qnt"]),
                     mana_cost=wish_card_data["mana_cost"],
                     price=wish_card_data["price"],
                     image=wish_card_data["image"],
