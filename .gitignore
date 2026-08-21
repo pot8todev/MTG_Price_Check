@@ -5,4 +5,5 @@ __pycache__
 .env
 test.py
 */deck.json
+*.csv
 stores_data.json

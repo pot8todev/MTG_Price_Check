@@ -12,9 +12,7 @@
 ## 🔴 High Priority
 
 - [ ] do algorithim of best_stores_order
-    > - [x] diversity parameter working
-    >- [ ] pick the x more diverse stores
-    >- [ ] check the orders required quantity
+- [ ] check the orders required quantity
 
 ## 🟡 Medium Priority
 
@@ -43,3 +41,5 @@
 - [x] Switch BeautifulSoup parser from `html.parser` to `lxml`
 - [x] Create JSON export
 - [x] Implement store scraping
+- [x] pick the x more diverse stores
+- [x] diversity parameter working
